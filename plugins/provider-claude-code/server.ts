@@ -32,6 +32,13 @@ export default function plugin(bb: BbPluginApi) {
         "Start Claude Code with the Claude in Chrome browser tools. Needs the Chrome extension and a claude.ai login on the host.",
       default: false,
     },
+    sandboxEnabled: {
+      type: "boolean",
+      label: "Claude Code sandbox",
+      description:
+        "Run Bash commands in Claude Code's sandbox in Accept Edits and Approve for me modes. Turn off to use Claude Code's own command approvals and sandbox settings instead.",
+      default: true,
+    },
   });
 
   bb.providers.register({
@@ -83,6 +90,7 @@ export default function plugin(bb: BbPluginApi) {
         providerSubagentsEnabled: context.settings.subagentsDisabled !== true,
         workflowsEnabled: context.settings.workflowsDisabled !== true,
         chromeEnabled: context.settings.chromeEnabled === true,
+        sandboxEnabled: context.settings.sandboxEnabled !== false,
         ...(context.promptMode === "plan"
           ? { claudeCodePermissionMode: "plan" }
           : {}),

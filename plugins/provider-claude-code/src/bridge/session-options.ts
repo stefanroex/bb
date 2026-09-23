@@ -26,6 +26,7 @@ export interface BuildSessionOptionsArgs {
   reasoningLevel?: ReasoningLevel;
   workflowsEnabled: boolean;
   chromeEnabled: boolean;
+  sandboxEnabled: boolean;
   memoryEnabled?: boolean;
 }
 
@@ -107,7 +108,7 @@ function isWorkspaceWriteSession(params: BuildSessionOptionsArgs): boolean {
 function buildWorkspaceWriteSandbox(
   params: BuildSessionOptionsArgs,
 ): Options["sandbox"] | undefined {
-  if (!isWorkspaceWriteSession(params)) {
+  if (!params.sandboxEnabled || !isWorkspaceWriteSession(params)) {
     return undefined;
   }
 

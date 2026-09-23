@@ -864,6 +864,7 @@ describe("bridge", () => {
     const options = buildSessionOptions(
       {
         chromeEnabled: false,
+        sandboxEnabled: true,
         workflowsEnabled: false,
         baseInstructions: "You are a manager.",
         cwd: "/tmp/worktree",
@@ -888,6 +889,7 @@ describe("bridge", () => {
     const options = buildSessionOptions(
       {
         chromeEnabled: false,
+        sandboxEnabled: true,
         baseInstructions: "You are a coder.",
         cwd: "/tmp/worktree",
         instructionMode: "append",
@@ -911,6 +913,7 @@ describe("bridge", () => {
     const options = buildSessionOptions(
       {
         chromeEnabled: false,
+        sandboxEnabled: true,
         baseInstructions: "You are a coder.",
         cwd: "/tmp/worktree",
         instructionMode: "append",
@@ -934,6 +937,7 @@ describe("bridge", () => {
     const options = buildSessionOptions(
       {
         chromeEnabled: false,
+        sandboxEnabled: true,
         workflowsEnabled: false,
         baseInstructions: "You are a coder.",
         cwd: "/tmp/worktree",
@@ -956,6 +960,7 @@ describe("bridge", () => {
     const options = buildSessionOptions(
       {
         chromeEnabled: false,
+        sandboxEnabled: true,
         workflowsEnabled: false,
         memoryEnabled: false,
         cwd: "/tmp/worktree",
@@ -975,6 +980,7 @@ describe("bridge", () => {
 
   it("passes --chrome only when Claude in Chrome is enabled", () => {
     const base = {
+      sandboxEnabled: true,
       workflowsEnabled: false,
       cwd: "/tmp/worktree",
       instructionMode: "append",
@@ -994,6 +1000,7 @@ describe("bridge", () => {
     const options = buildSessionOptions(
       {
         chromeEnabled: false,
+        sandboxEnabled: true,
         workflowsEnabled: false,
         baseInstructions: "You are a coder.",
         cwd: "/tmp/worktree",
@@ -1022,6 +1029,7 @@ describe("bridge", () => {
     const options = buildSessionOptions(
       {
         chromeEnabled: false,
+        sandboxEnabled: true,
         workflowsEnabled: false,
         baseInstructions: "You are a coder.",
         cwd: "/tmp/worktree",
@@ -1043,6 +1051,7 @@ describe("bridge", () => {
     const options = buildSessionOptions(
       {
         chromeEnabled: false,
+        sandboxEnabled: true,
         workflowsEnabled: false,
         baseInstructions: "You are a coder.",
         cwd: "/tmp/worktree",
@@ -1061,6 +1070,7 @@ describe("bridge", () => {
     const options = buildSessionOptions(
       {
         chromeEnabled: false,
+        sandboxEnabled: true,
         workflowsEnabled: false,
         baseInstructions: "You are a coder.",
         cwd: "/tmp/worktree",
@@ -1086,6 +1096,7 @@ describe("bridge", () => {
     const options = buildSessionOptions(
       {
         chromeEnabled: false,
+        sandboxEnabled: true,
         workflowsEnabled: false,
         baseInstructions: "You are a coder.",
         cwd: "/tmp/worktree",
@@ -1104,6 +1115,7 @@ describe("bridge", () => {
     const options = buildSessionOptions(
       {
         chromeEnabled: false,
+        sandboxEnabled: true,
         workflowsEnabled: false,
         baseInstructions: "You are a coder.",
         cwd: "/tmp/worktree",
@@ -1125,6 +1137,7 @@ describe("bridge", () => {
     const options = buildSessionOptions(
       {
         chromeEnabled: false,
+        sandboxEnabled: true,
         workflowsEnabled: false,
         baseInstructions: "You are a coder.",
         cwd: "/tmp/worktree",
@@ -1150,6 +1163,7 @@ describe("bridge", () => {
       buildSessionOptions(
         {
           chromeEnabled: false,
+          sandboxEnabled: true,
           workflowsEnabled: false,
           baseInstructions: "You are a coder.",
           cwd: "/tmp/worktree",
@@ -1169,6 +1183,7 @@ describe("bridge", () => {
     const acceptEditsOptions = buildSessionOptions(
       {
         chromeEnabled: false,
+        sandboxEnabled: true,
         workflowsEnabled: false,
         baseInstructions: "You are a coder.",
         cwd: "/tmp/worktree",
@@ -1181,6 +1196,7 @@ describe("bridge", () => {
     const autoOptions = buildSessionOptions(
       {
         chromeEnabled: false,
+        sandboxEnabled: true,
         workflowsEnabled: false,
         baseInstructions: "You are a coder.",
         cwd: "/tmp/worktree",
@@ -1213,6 +1229,7 @@ describe("bridge", () => {
     const options = buildSessionOptions(
       {
         chromeEnabled: false,
+        sandboxEnabled: true,
         workflowsEnabled: false,
         additionalWorkspaceWriteRoots: ["/repo/.git/worktrees/bb13"],
         baseInstructions: "You are a coder.",
@@ -1233,6 +1250,7 @@ describe("bridge", () => {
     const options = buildSessionOptions(
       {
         chromeEnabled: false,
+        sandboxEnabled: true,
         workflowsEnabled: false,
         additionalWorkspaceWriteRoots: [
           "/repo/.git/worktrees/bb13",
@@ -1261,6 +1279,29 @@ describe("bridge", () => {
         allowWrite: ["/repo/.git/worktrees/bb13", "/repo/.git/objects"],
       },
     });
+  });
+
+  it("leaves the Claude sandbox off when the sandbox setting is disabled", () => {
+    const options = buildSessionOptions(
+      {
+        chromeEnabled: false,
+        sandboxEnabled: false,
+        workflowsEnabled: false,
+        additionalWorkspaceWriteRoots: ["/repo/.git/worktrees/bb13"],
+        baseInstructions: "You are a coder.",
+        cwd: "/tmp/worktree",
+        instructionMode: "append",
+        permissionMode: "acceptEdits",
+        permissionScope: "workspace",
+      },
+      {},
+    );
+
+    expect(options.permissionMode).toBe("acceptEdits");
+    expect(options).not.toHaveProperty("sandbox");
+    expect(options.additionalDirectories).toEqual([
+      "/repo/.git/worktrees/bb13",
+    ]);
   });
 
   describe("Bash canUseTool policy", () => {

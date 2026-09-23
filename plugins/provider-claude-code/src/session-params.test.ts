@@ -12,6 +12,7 @@ const EXECUTION_CONTEXT = {
   claudeCodePermissionMode: "plan",
   workflowsEnabled: true,
   chromeEnabled: true,
+  sandboxEnabled: false,
   memoryEnabled: false,
   providerSubagentsEnabled: false,
   instructions: "Session instructions",
@@ -27,6 +28,7 @@ function toCanonicalWireOptions(options: typeof EXECUTION_CONTEXT) {
     claudeCodePermissionMode,
     workflowsEnabled,
     chromeEnabled,
+    sandboxEnabled,
     memoryEnabled,
     providerSubagentsEnabled,
     ...core
@@ -37,6 +39,7 @@ function toCanonicalWireOptions(options: typeof EXECUTION_CONTEXT) {
       claudeCodePermissionMode,
       workflowsEnabled,
       chromeEnabled,
+      sandboxEnabled,
       memoryEnabled,
       providerSubagentsEnabled,
     },
@@ -83,6 +86,7 @@ describe("buildClaudeSessionParams", () => {
       permissionMode: "plan",
       workflowsEnabled: true,
       chromeEnabled: true,
+      sandboxEnabled: false,
       memoryEnabled: false,
       providerSubagentsEnabled: false,
       model: "claude-sonnet-5",
@@ -126,6 +130,7 @@ describe("buildClaudeSessionParams", () => {
     expect(params).toMatchObject({
       workflowsEnabled: false,
       chromeEnabled: false,
+      sandboxEnabled: true,
       permissionMode: "bypassPermissions",
       approvedPlanPermissionMode: "bypassPermissions",
     });

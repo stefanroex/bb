@@ -912,6 +912,7 @@ describe("thread runtime config", () => {
         chromeEnabled: false,
         memoryEnabled: true,
         providerSubagentsEnabled: true,
+        sandboxEnabled: true,
         workflowsEnabled: true,
       });
 

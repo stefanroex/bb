@@ -52,6 +52,7 @@ export const claudeThreadStartParamsSchema = z.object({
   reasoningLevel: reasoningLevelSchema.optional(),
   workflowsEnabled: z.boolean(),
   chromeEnabled: z.boolean(),
+  sandboxEnabled: z.boolean(),
   memoryEnabled: z.boolean().optional(),
   providerSubagentsEnabled: z.boolean().optional(),
   instructionMode: bridgeInstructionModeSchema,
