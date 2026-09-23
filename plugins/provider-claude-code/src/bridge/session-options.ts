@@ -96,7 +96,7 @@ export function buildWorkspaceWriteDenialMessage(): string {
   return "bb's workspace sandbox allows work inside the current workspace only. Stay inside the workspace or explain why extra access is needed.";
 }
 
-function usesWorkspaceSandbox(params: BuildSessionOptionsArgs): boolean {
+function isWorkspaceWriteSession(params: BuildSessionOptionsArgs): boolean {
   return (
     params.permissionScope === "workspace" &&
     (params.permissionMode === "acceptEdits" ||
@@ -107,7 +107,7 @@ function usesWorkspaceSandbox(params: BuildSessionOptionsArgs): boolean {
 function buildWorkspaceWriteSandbox(
   params: BuildSessionOptionsArgs,
 ): Options["sandbox"] | undefined {
-  if (!usesWorkspaceSandbox(params)) {
+  if (!isWorkspaceWriteSession(params)) {
     return undefined;
   }
 
@@ -218,7 +218,7 @@ export function buildSessionOptions(
         };
   const model = params.model;
   const sandbox = buildWorkspaceWriteSandbox(params);
-  const additionalDirectories = usesWorkspaceSandbox(params)
+  const additionalDirectories = isWorkspaceWriteSession(params)
     ? (params.additionalWorkspaceWriteRoots ?? [])
     : [];
   const pathToClaudeCodeExecutable = resolveClaudeCodeExecutable({ env });
