@@ -81,6 +81,7 @@ export const claudeTurnStartParamsSchema = z.object({
   reasoningLevel: reasoningLevelSchema.optional(),
   workflowsEnabled: z.boolean().optional(),
   chromeEnabled: z.boolean().optional(),
+  sandboxEnabled: z.boolean().optional(),
   memoryEnabled: z.boolean().optional(),
   providerSubagentsEnabled: z.boolean().optional(),
   config: z.record(z.string(), z.unknown()).optional(),

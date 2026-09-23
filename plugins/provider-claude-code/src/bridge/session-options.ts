@@ -30,6 +30,14 @@ export interface BuildSessionOptionsArgs {
   memoryEnabled?: boolean;
 }
 
+type WorkspaceWriteSandboxArgs = Pick<
+  BuildSessionOptionsArgs,
+  | "additionalWorkspaceWriteRoots"
+  | "permissionMode"
+  | "permissionScope"
+  | "sandboxEnabled"
+>;
+
 export interface PermissionEscalationWorkContext {
   agentId?: string;
   promptId?: string;
@@ -97,7 +105,7 @@ export function buildWorkspaceWriteDenialMessage(): string {
   return "bb's workspace sandbox allows work inside the current workspace only. Stay inside the workspace or explain why extra access is needed.";
 }
 
-function isWorkspaceWriteSession(params: BuildSessionOptionsArgs): boolean {
+function isWorkspaceWriteSession(params: WorkspaceWriteSandboxArgs): boolean {
   return (
     params.permissionScope === "workspace" &&
     (params.permissionMode === "acceptEdits" ||
@@ -105,8 +113,8 @@ function isWorkspaceWriteSession(params: BuildSessionOptionsArgs): boolean {
   );
 }
 
-function buildWorkspaceWriteSandbox(
-  params: BuildSessionOptionsArgs,
+export function buildWorkspaceWriteSandbox(
+  params: WorkspaceWriteSandboxArgs,
 ): Options["sandbox"] | undefined {
   if (!params.sandboxEnabled || !isWorkspaceWriteSession(params)) {
     return undefined;

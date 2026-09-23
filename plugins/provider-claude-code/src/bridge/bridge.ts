@@ -82,6 +82,7 @@ import {
   buildMutableFlagSettings,
   buildSessionOptions,
   buildWorkspaceWriteDenialMessage,
+  buildWorkspaceWriteSandbox,
   toSdkEffort,
   type BuildSessionOptionsArgs,
   type PermissionEscalationWorkContext,
@@ -391,6 +392,8 @@ function requireSkillPluginsRoot(): string {
 
 const THREAD_STOP_CLOSE_TIMEOUT_MS = 4_000;
 const CLAUDE_CHROME_SETTING_RESTART_REASON = "Claude in Chrome setting changed";
+const CLAUDE_SANDBOX_SETTING_RESTART_REASON =
+  "Claude Code sandbox setting changed";
 
 const { send, sendResult, sendError } = createBridgeIo<
   BridgeEventNotification | BridgeToolCallRequest
@@ -427,6 +430,29 @@ function applyChromeSetting(
   if (attachment.residentSession) {
     attachment.residentSession.restartBeforeNextTurn = {
       reason: CLAUDE_CHROME_SETTING_RESTART_REASON,
+      showRuntimeNote: false,
+    };
+  }
+}
+
+function applySandboxSetting(
+  attachment: ThreadAttachment,
+  enabled: boolean | undefined,
+): void {
+  const sessionOptions = attachment.sessionConstructionConfig.sessionOptions;
+  if (enabled === undefined || sessionOptions.sandboxEnabled === enabled) {
+    return;
+  }
+  sessionOptions.sandboxEnabled = enabled;
+  const sandbox = buildWorkspaceWriteSandbox(sessionOptions);
+  if (sandbox) {
+    attachment.sessionOptions.sandbox = sandbox;
+  } else {
+    delete attachment.sessionOptions.sandbox;
+  }
+  if (attachment.residentSession) {
+    attachment.residentSession.restartBeforeNextTurn = {
+      reason: CLAUDE_SANDBOX_SETTING_RESTART_REASON,
       showRuntimeNote: false,
     };
   }
@@ -2244,6 +2270,7 @@ async function runTurnInput(
       applyTurnEnvironment(attachment, params.config);
     }
     applyChromeSetting(attachment, params.chromeEnabled);
+    applySandboxSetting(attachment, params.sandboxEnabled);
   }
 
   const threadSession = await getWritableThreadSession(params.threadId, intent);

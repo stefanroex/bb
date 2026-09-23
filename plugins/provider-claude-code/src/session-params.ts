@@ -247,6 +247,7 @@ export function buildClaudeTurnParams(
       : {}),
     workflowsEnabled: providerOptions.workflowsEnabled,
     chromeEnabled: providerOptions.chromeEnabled,
+    sandboxEnabled: providerOptions.sandboxEnabled,
     memoryEnabled: providerOptions.memoryEnabled,
     providerSubagentsEnabled: providerOptions.providerSubagentsEnabled,
     ...(config ? { config } : {}),
